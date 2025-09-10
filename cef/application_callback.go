@@ -19,12 +19,12 @@ import (
 )
 
 // 创建应用上下文 - 默认实现
-func appOnContextCreated(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context) {
-	process.Current.SetBrowserId(browser.Identifier()) // 当前进程 browserID
-	process.Current.SetFrameId(frame.Identifier())     // 当前进程 frameId
-	ipcRender.makeIPC(frame.Identifier(), context)     // render ipc make
-	dragExtension.make(frame.Identifier(), context)    // 拖拽JS扩展
-	makeProcess(browser, frame, context)               // process make
+func appOnContextCreated(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context, enableInfraProcess bool) {
+	process.Current.SetBrowserId(browser.Identifier())       // 当前进程 browserID
+	process.Current.SetFrameId(frame.Identifier())           // 当前进程 frameId
+	ipcRender.makeIPC(frame.Identifier(), context)           // render ipc make
+	dragExtension.make(frame.Identifier(), context)          // 拖拽JS扩展
+	makeProcess(browser, frame, context, enableInfraProcess) // process make
 }
 
 // webkit - 默认实现

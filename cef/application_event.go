@@ -97,7 +97,8 @@ func init() {
 			browse := &ICefBrowser{instance: getPtr(0)}
 			frame := &ICefFrame{instance: getPtr(1)}
 			ctx := &ICefV8Context{instance: getPtr(2)}
-			fn.(GlobalCEFAppEventOnContextCreated)(browse, frame, ctx)
+			enableInfraProcess := (*bool)(getPtr(3))
+			fn.(GlobalCEFAppEventOnContextCreated)(browse, frame, ctx, *enableInfraProcess)
 		case GlobalCEFAppEventOnContextReleased:
 			browse := &ICefBrowser{instance: getPtr(0)}
 			frame := &ICefFrame{instance: getPtr(1)}

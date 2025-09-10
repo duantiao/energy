@@ -38,15 +38,51 @@ type TCEFApplication struct {
 	onRenderLoadStart        GlobalCEFAppEventOnRenderLoadStart
 	externalMessagePump      bool
 	multiThreadedMessageLoop bool
+	enableInfraProcess       bool
+}
+
+type TCEFApplicationOptions struct {
+	disableRegisDefaultEvent bool
+	enableInfraProcess       bool
+}
+
+type TCEFApplicationOptionFunc func(opts *TCEFApplicationOptions) error
+
+func WithTCEFApplicationDisableRegisDefaultEventOption() TCEFApplicationOptionFunc {
+	return func(opts *TCEFApplicationOptions) error {
+		if opts != nil {
+			opts.disableRegisDefaultEvent = true
+		}
+		return nil
+	}
+}
+
+func WithTCEFApplicationEnableInfraProcessOption() TCEFApplicationOptionFunc {
+	return func(opts *TCEFApplicationOptions) error {
+		if opts != nil {
+			opts.enableInfraProcess = true
+		}
+		return nil
+	}
 }
 
 // NewApplication 创建CEF应用
 //
 // 参数: disableRegisDefaultEvent = true 时不会注册默认事件
-func NewApplication(disableRegisDefaultEvent ...bool) *TCEFApplication {
+func NewApplication(opts ...TCEFApplicationOptionFunc) *TCEFApplication {
+	var options TCEFApplicationOptions
+	for _, optFunc := range opts {
+		if optFunc == nil {
+			continue
+		}
+		if err := optFunc(&options); err != nil {
+			return nil
+		}
+	}
 	if application == nil {
 		application = CreateApplication()
-		if len(disableRegisDefaultEvent) == 0 || !disableRegisDefaultEvent[0] {
+		application.enableInfraProcess = options.enableInfraProcess
+		if !options.disableRegisDefaultEvent {
 			application.registerDefaultEvent()
 		}
 		application.initDefaultSettings()
@@ -292,13 +328,13 @@ func (m *TCEFApplication) setOnContextCreated(fn GlobalCEFAppEventOnContextCreat
 }
 
 func (m *TCEFApplication) defaultSetOnContextCreated() {
-	m.setOnContextCreated(func(browse *ICefBrowser, frame *ICefFrame, context *ICefV8Context) bool {
+	m.setOnContextCreated(func(browse *ICefBrowser, frame *ICefFrame, context *ICefV8Context, enableInfraProcess bool) bool {
 		var flag bool
 		if m.onContextCreated != nil {
-			flag = m.onContextCreated(browse, frame, context)
+			flag = m.onContextCreated(browse, frame, context, enableInfraProcess)
 		}
 		if !flag {
-			appOnContextCreated(browse, frame, context)
+			appOnContextCreated(browse, frame, context, enableInfraProcess)
 		}
 		return false
 	})

@@ -27,7 +27,7 @@ func main() {
 	cef.GlobalInit(nil, nil)
 	var window = &WindowForm{}
 	//创建应用
-	app := cef.NewApplication(true)
+	app := cef.NewApplication(cef.WithTCEFApplicationDisableRegisDefaultEventOption())
 	// OSR 离屏渲染
 	app.SetWindowlessRenderingEnabled(true)
 	// 指定消息模式

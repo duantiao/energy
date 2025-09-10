@@ -194,7 +194,7 @@ type GlobalCEFAppEventOnGetDataResourceForScale func(resourceId int32, scaleFact
 type GlobalCEFAppEventOnWebKitInitialized func()
 type GlobalCEFAppEventOnBrowserCreated func(browser *ICefBrowser, extraInfo *ICefDictionaryValue)
 type GlobalCEFAppEventOnBrowserDestroyed func(browser *ICefBrowser)
-type GlobalCEFAppEventOnContextCreated func(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context) bool
+type GlobalCEFAppEventOnContextCreated func(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context, enableInfraProcess bool) bool
 type GlobalCEFAppEventOnContextReleased func(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context)
 type GlobalCEFAppEventOnUncaughtException func(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context, exception *ICefV8Exception, stackTrace *ICefV8StackTrace)
 type GlobalCEFAppEventOnFocusedNodeChanged func(browser *ICefBrowser, frame *ICefFrame, node *ICefDomNode)

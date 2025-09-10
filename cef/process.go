@@ -17,6 +17,7 @@ import (
 // process
 const (
 	internalProcess          = "process"
+	infraInternalProcess     = "infraProcess"
 	internalProcessBrowserId = "browserId"
 	internalProcessFrameId   = "frameId"
 )
@@ -24,7 +25,7 @@ const (
 var _processObject *ICefV8Value
 
 // makeProcess 进程扩展变量
-func makeProcess(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context) {
+func makeProcess(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context, enableInfraProcess bool) {
 	if _processObject != nil {
 		// 刷新时释放掉
 		_processObject.Free()
@@ -35,5 +36,9 @@ func makeProcess(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context)
 	_processObject.setValueByKey(internalProcessFrameId, V8ValueRef.NewString(frame.Identifier()), consts.V8_PROPERTY_ATTRIBUTE_READONLY)
 
 	// process key to v8 global
-	context.Global().setValueByKey(internalProcess, _processObject, consts.V8_PROPERTY_ATTRIBUTE_READONLY)
+	processKey := internalProcess
+	if enableInfraProcess {
+		processKey = infraInternalProcess
+	}
+	context.Global().setValueByKey(processKey, _processObject, consts.V8_PROPERTY_ATTRIBUTE_READONLY)
 }
