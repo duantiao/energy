@@ -114,3 +114,5 @@ EnergyFrameworkDownloadCache
 ssl
 
 testdata
+
+!cmd/assets/*

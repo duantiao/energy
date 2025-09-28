@@ -12,8 +12,7 @@ package remotecfg
 
 import (
 	"encoding/json"
-	"github.com/energye/energy/v2/cmd/internal/consts"
-	"github.com/energye/energy/v2/cmd/internal/env"
+	assetRemoteCfg "github.com/energye/energy/v2/cmd/assets/remotecfg"
 	"github.com/energye/energy/v2/cmd/internal/tools"
 	"strings"
 )
@@ -26,13 +25,13 @@ type TLatestVersion struct {
 }
 
 func LatestVersion() (*TLatestVersion, error) {
-	data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.LATEST_VERSION_URL), env.GlobalDevEnvConfig.Proxy)
-	if err != nil {
-		return nil, err
-	}
+	//data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.LATEST_VERSION_URL), env.GlobalDevEnvConfig.Proxy)
+	//if err != nil {
+	//	return nil, err
+	//}
+	data := assetRemoteCfg.LatestVersionCfg
 	var lv TLatestVersion
-	err = json.Unmarshal(data, &lv)
-	if err != nil {
+	if err := json.Unmarshal(data, &lv); err != nil {
 		return nil, err
 	}
 	vs := strings.Split(lv.Version, ".")

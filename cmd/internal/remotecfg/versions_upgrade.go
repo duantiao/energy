@@ -12,9 +12,7 @@ package remotecfg
 
 import (
 	"encoding/json"
-	"github.com/energye/energy/v2/cmd/internal/consts"
-	"github.com/energye/energy/v2/cmd/internal/env"
-	"github.com/energye/energy/v2/cmd/internal/tools"
+	assetRemoteCfg "github.com/energye/energy/v2/cmd/assets/remotecfg"
 )
 
 type VersionsUpgradeList map[string]TVersionsUpgrade
@@ -35,13 +33,13 @@ type TDependenceModule struct {
 // 版本发布升级列表
 func VersionUpgradeList() (VersionsUpgradeList, error) {
 	if upgradeList == nil {
-		data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.VERSIONS_UPGRADE_URL), env.GlobalDevEnvConfig.Proxy)
-		if err != nil {
-			return nil, err
-		}
+		//data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.VERSIONS_UPGRADE_URL), env.GlobalDevEnvConfig.Proxy)
+		//if err != nil {
+		//	return nil, err
+		//}
+		data := assetRemoteCfg.VersionUpgradeCfg
 		var vu map[string]TVersionsUpgrade
-		err = json.Unmarshal(data, &vu)
-		if err != nil {
+		if err := json.Unmarshal(data, &vu); err != nil {
 			return nil, err
 		}
 		upgradeList = vu

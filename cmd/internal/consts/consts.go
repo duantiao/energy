@@ -51,6 +51,7 @@ const (
 const (
 	CEFLatestEmpty = ""
 	CEFLatest      = "latest"
+	CEF120         = "120"      // CEF 120
 	CEF109         = "109"      // CEF 109
 	CEF109118      = "109.1.18" // CEF 109.1.18
 	CEF101         = "101"      // CEF 101

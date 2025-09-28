@@ -12,9 +12,7 @@ package remotecfg
 
 import (
 	"encoding/json"
-	"github.com/energye/energy/v2/cmd/internal/consts"
-	"github.com/energye/energy/v2/cmd/internal/env"
-	"github.com/energye/energy/v2/cmd/internal/tools"
+	assetRemoteCfg "github.com/energye/energy/v2/cmd/assets/remotecfg"
 )
 
 type TModelCEFConfigs map[string]TModelCEFConfig
@@ -22,13 +20,13 @@ type TModelCEFConfigs map[string]TModelCEFConfig
 type TModelCEFConfig map[string]TModelItem
 
 func ModelCEFConfig() (TModelCEFConfigs, error) {
-	data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.MODEL_CEF_URL), env.GlobalDevEnvConfig.Proxy)
-	if err != nil {
-		return nil, err
-	}
+	//data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.MODEL_CEF_URL), env.GlobalDevEnvConfig.Proxy)
+	//if err != nil {
+	//	return nil, err
+	//}
+	data := assetRemoteCfg.ModelCEFCfg
 	var config TModelCEFConfigs
-	err = json.Unmarshal(data, &config)
-	if err != nil {
+	if err := json.Unmarshal(data, &config); err != nil {
 		return nil, err
 	}
 	return config, nil

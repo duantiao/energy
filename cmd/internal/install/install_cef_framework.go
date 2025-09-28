@@ -152,28 +152,36 @@ func installCEFFramework(config *remotecfg.TConfig, cmdConfig *command.Config) (
 	for i := 0; i < len(sortsKeys); i++ {
 		key := sortsKeys[i]
 		dl, ok := downloads[key]
-		if ok {
-			term.Section.Println("Download", key, ":", dl.url)
-			err := tools.DownloadFile(dl.url, dl.downloadPath, env.GlobalDevEnvConfig.Proxy, nil)
-			if key == consts.LiblclKey {
-				if err != nil {
-					// 失败尝试使用下个下载源
-					if downURL := getLibLCLDownUrl(); downURL != "" {
-						term.Logger.Error("Download", term.Logger.Args("ERROR", err.Error(), "Auto switch download source", downURL))
-						dl.url = downURL
-						i--
-						continue
-					} else {
-						return "", nil, errors.New("Download [" + dl.fileName + "] " + err.Error())
-					}
-				}
-			} else {
-				if err != nil {
+		if !ok {
+			continue
+		}
+		if strings.HasPrefix(dl.url, "local://") {
+			if !tools.IsExist(dl.downloadPath) {
+				return "", nil, fmt.Errorf("Local File %s is not exist. ", dl.downloadPath)
+			}
+			term.Section.Println("Local exist", key, ":", dl.url)
+			continue
+		}
+		term.Section.Println("Download", key, ":", dl.url)
+		err := tools.DownloadFile(dl.url, dl.downloadPath, env.GlobalDevEnvConfig.Proxy, nil)
+		if key == consts.LiblclKey {
+			if err != nil {
+				// 失败尝试使用下个下载源
+				if downURL := getLibLCLDownUrl(); downURL != "" {
+					term.Logger.Error("Download", term.Logger.Args("ERROR", err.Error(), "Auto switch download source", downURL))
+					dl.url = downURL
+					i--
+					continue
+				} else {
 					return "", nil, errors.New("Download [" + dl.fileName + "] " + err.Error())
 				}
 			}
-			dl.success = err == nil
+		} else {
+			if err != nil {
+				return "", nil, errors.New("Download [" + dl.fileName + "] " + err.Error())
+			}
 		}
+		dl.success = err == nil
 	}
 
 	// 解压文件, 并根据配置提取文件

@@ -98,28 +98,32 @@ func (m TConfig) GetInstallVersion(c *command.Config) (installVersion *TVersions
 			majorVersion, _, _ := tools.VersionNumber()
 			if majorVersion < 10 {
 				cef = consts.CEF109 // windows7 默认
+				term.Section.Printf("Windows Version %d < 10, must use CEF109.\n", majorVersion)
 			}
 		}
 	}
 	// 匹配固定的几个模块名
-	if cef == consts.CEF109 {
+	switch cef {
+	case consts.CEF120:
+		cefModuleName = "cef-120"
+		liblclModuleName = "liblcl"
+	case consts.CEF109:
 		cefModuleName = "cef-109"
 		liblclModuleName = "liblcl-109"
-	} else if cef == consts.CEF106 {
+	case consts.CEF106:
 		cefModuleName = "cef-106"
 		liblclModuleName = "liblcl-106"
-	} else if cef == consts.CEF101 {
+	case consts.CEF101:
 		cefModuleName = "cef-101"
 		liblclModuleName = "liblcl-101"
-	} else if cef == consts.CEF87 {
+	case consts.CEF87:
 		cefModuleName = "cef-87"
 		liblclModuleName = "liblcl-87"
-	} else if cef == consts.CEF89 {
+	case consts.CEF89:
 		cefModuleName = "cef-89"
 		liblclModuleName = "liblcl-89"
-	}
-	// 未匹配到, 找到当前安装 energy 版本所支持的最新 CEF 版本号, 规则为取版本号最大数字
-	if cefModuleName == "" {
+	default:
+		// 未匹配到, 找到当前安装 energy 版本所支持的最新 CEF 版本号, 规则为取版本号最大数字
 		var (
 			cefDefault string
 			number     int
@@ -141,6 +145,7 @@ func (m TConfig) GetInstallVersion(c *command.Config) (installVersion *TVersions
 		cefModuleName = cefDefault
 		liblclModuleName = "liblcl" // 固定名前缀
 	}
+
 	return
 }
 

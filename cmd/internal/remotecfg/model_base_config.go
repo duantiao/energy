@@ -12,10 +12,8 @@ package remotecfg
 
 import (
 	"encoding/json"
+	assetRemoteCfg "github.com/energye/energy/v2/cmd/assets/remotecfg"
 	"github.com/energye/energy/v2/cmd/internal/command"
-	"github.com/energye/energy/v2/cmd/internal/consts"
-	"github.com/energye/energy/v2/cmd/internal/env"
-	"github.com/energye/energy/v2/cmd/internal/tools"
 	"strconv"
 )
 
@@ -49,13 +47,13 @@ type TExtract struct {
 }
 
 func ModeBaseConfig() (*TModeBaseConfig, error) {
-	data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.BASE_CONFIG_URL), env.GlobalDevEnvConfig.Proxy)
-	if err != nil {
-		return nil, err
-	}
+	//data, err := tools.Get(env.GlobalDevEnvConfig.RemoteURL(consts.BASE_CONFIG_URL), env.GlobalDevEnvConfig.Proxy)
+	//if err != nil {
+	//	return nil, err
+	//}
+	data := assetRemoteCfg.ModelBaseCfg
 	var mbc TModeBaseConfig
-	err = json.Unmarshal(data, &mbc)
-	if err != nil {
+	if err := json.Unmarshal(data, &mbc); err != nil {
 		return nil, err
 	}
 	return &mbc, nil
