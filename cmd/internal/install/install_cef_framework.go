@@ -160,6 +160,7 @@ func installCEFFramework(config *remotecfg.TConfig, cmdConfig *command.Config) (
 				return "", nil, fmt.Errorf("Local File %s is not exist. ", dl.downloadPath)
 			}
 			term.Section.Println("Local exist", key, ":", dl.url)
+			dl.success = true
 			continue
 		}
 		term.Section.Println("Download", key, ":", dl.url)
