@@ -71,6 +71,24 @@ func ExtractUnZip(filePath, targetPath string, rmRootDir bool, files ...string) 
 				return err
 			}
 		}
+
+		var newFiles []string
+		for _, targetFile := range files {
+			if !strings.Contains(targetFile, "*") {
+				newFiles = append(newFiles, targetFile)
+				continue
+			}
+			for _, file := range rc.File {
+				compressPath := filepath.Clean(file.Name[strings.Index(file.Name, "/")+1:])
+				_, isInclude := filePathInclude(compressPath, files...)
+				if !isInclude {
+					continue
+				}
+				newFiles = append(newFiles, file.Name)
+			}
+		}
+		files = newFiles
+
 		// 所有文件
 		if len(files) == 0 {
 			zipFiles := rc.File
@@ -106,7 +124,7 @@ func ExtractUnZip(filePath, targetPath string, rmRootDir bool, files ...string) 
 				extractFilesProcessBar.Increment() // +1
 				if f, err := rc.Open(files[i]); err == nil {
 					info, _ := f.Stat()
-					if err := createWriteFile(info, files[i], f); err != nil {
+					if err := createWriteFile(info, filepath.Base(files[i]), f); err != nil {
 						return err
 					}
 					_ = f.Close()
