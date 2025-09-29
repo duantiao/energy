@@ -41,6 +41,12 @@
       "supportOSArch": "Windows64,Windows32,MacOSX64,MacOSARM64,Linux64,LinuxARM64,LinuxARM"
     }
   },
+  "cef-126": {
+    "126.2.10+g61241e4+chromium-126.0.6478.127": {
+      "downloadSource": 2,
+      "supportOSArch": "Windows64,Windows32,MacOSX64,MacOSARM64,Linux64,LinuxARM64,LinuxARM"
+    }
+  },
   "cef-130": {
     "130.1.16+g5a7e5ed+chromium-130.0.6723.117": {
       "downloadSource": 0,
