@@ -104,6 +104,12 @@ func (m TConfig) GetInstallVersion(c *command.Config) (installVersion *TVersions
 	}
 	// 匹配固定的几个模块名
 	switch cef {
+	case consts.CEF133:
+		cefModuleName = "cef-133"
+		liblclModuleName = "liblcl"
+	case consts.CEF130:
+		cefModuleName = "cef-130"
+		liblclModuleName = "liblcl"
 	case consts.CEF126:
 		cefModuleName = "cef-126"
 		liblclModuleName = "liblcl"
