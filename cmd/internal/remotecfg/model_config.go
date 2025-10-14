@@ -116,6 +116,9 @@ func (m TConfig) GetInstallVersion(c *command.Config) (installVersion *TVersions
 	case consts.CEF120:
 		cefModuleName = "cef-120"
 		liblclModuleName = "liblcl"
+	case consts.CEF111:
+		cefModuleName = "cef-111"
+		liblclModuleName = "liblcl-109"
 	case consts.CEF109:
 		cefModuleName = "cef-109"
 		liblclModuleName = "liblcl-109"
