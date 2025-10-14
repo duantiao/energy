@@ -32,8 +32,12 @@
         "url": "https://sourceforge.net/projects/liblcl/files/CEF/{version}/cef_binary_{version}_{OSARCH}_minimal.7z"
       },
       "2": {
-        "label": "local",
+        "label": "local-zip",
         "url": "local://energy/assets/cef/cef_binary_{version}_{OSARCH}.zip"
+      },
+      "3": {
+        "label": "local-bz2",
+        "url": "local://energy/assets/cef/cef_binary_{version}_{OSARCH}_minimal.tar.bz2"
       }
     },
     "golang": {

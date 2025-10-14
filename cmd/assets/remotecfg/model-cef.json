@@ -49,13 +49,13 @@
   },
   "cef-130": {
     "130.1.16+g5a7e5ed+chromium-130.0.6723.117": {
-      "downloadSource": 0,
+      "downloadSource": 3,
       "supportOSArch": "Windows64,Windows32,MacOSX64,MacOSARM64,Linux64,LinuxARM64,LinuxARM"
     }
   },
   "cef-133": {
     "133.0.0-HEAD.3111+g2197e2d+chromium-133.0.6886.0": {
-      "downloadSource": 0,
+      "downloadSource": 3,
       "supportOSArch": "Windows64,Windows32,MacOSX64,MacOSARM64,Linux64,LinuxARM64,LinuxARM"
     }
   },
