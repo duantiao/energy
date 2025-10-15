@@ -31,7 +31,7 @@ VIAddVersionKey "LegalCopyright"  "${INFO_Copyright}"
     !insertmacro MUI_PAGE_LICENSE "${ENERGY_PAGE_LICENSE}" # Add a LICENSE page to the installer
 !endif
 
-!insertmacro MUI_PAGE_DIRECTORY # In which folder install page.
+; !insertmacro MUI_PAGE_DIRECTORY # In which folder install page.
 !insertmacro MUI_PAGE_INSTFILES # Installing page.
 !insertmacro MUI_PAGE_FINISH # Finished installation page.
 
@@ -49,8 +49,6 @@ InstallDir "$PROGRAMFILES64\${INFO_CompanyName}\${INFO_ProductName}" # Default i
 ShowInstDetails show # This will always show the installation details.
 
 Function .onInit
-    ; 强制设置安装目录，不允许用户修改
-    StrCpy $INSTDIR "$PROGRAMFILES64\${INFO_CompanyName}\${INFO_ProductName}"
 FunctionEnd
 
 Section
