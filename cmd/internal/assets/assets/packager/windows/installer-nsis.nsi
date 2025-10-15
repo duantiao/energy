@@ -49,6 +49,8 @@ InstallDir "$PROGRAMFILES64\${INFO_CompanyName}\${INFO_ProductName}" # Default i
 ShowInstDetails show # This will always show the installation details.
 
 Function .onInit
+    ; 强制设置安装目录，不允许用户修改
+    StrCpy $INSTDIR "$PROGRAMFILES64\${INFO_CompanyName}\${INFO_ProductName}"
 FunctionEnd
 
 Section
