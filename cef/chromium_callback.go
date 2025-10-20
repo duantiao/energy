@@ -74,11 +74,11 @@ func chromiumOnBeforeClose(m IBrowserWindow, browser *ICefBrowser) {
 }
 
 var (
-	refreshId, forcedRefreshId                                 consts.MenuId
-	devToolsId, viewSourceId, closeBrowserId                   consts.MenuId
-	backId, forwardId, printId                                 consts.MenuId
-	undoId, redoId, cutId, copyId, pasteId, delId, selectAllId consts.MenuId
-	imageUrlId, copyImageId, imageSaveId, aUrlId               consts.MenuId
+	refreshId, forcedRefreshId                                            consts.MenuId
+	devToolsId, viewSourceId, closeBrowserId                              consts.MenuId
+	backId, forwardId, printId                                            consts.MenuId
+	undoId, redoId, cutId, copyId, pasteId, delId, selectAllId            consts.MenuId
+	imageUrlId, copyImageId, imageSaveId, aUrlId, videoUrlId, videoSaveId consts.MenuId
 )
 
 // chromiumOnBeforeContextMenu 右键菜单 - 默认实现
@@ -178,6 +178,7 @@ func chromiumOnBeforeContextMenu(currentWindow IBrowserWindow, browser *ICefBrow
 	}
 	//A标签和图片 链接
 	isLink := params.TypeFlags()&consts.CM_TYPEFLAG_LINK == consts.CM_TYPEFLAG_LINK
+	isMedia := params.TypeFlags()&consts.CM_TYPEFLAG_MEDIA == consts.CM_TYPEFLAG_MEDIA
 	isCopyLink := params.MediaType() == consts.CM_MEDIATYPE_NONE && isLink
 	if isCopyLink {
 		aUrlId = model.CefMis.NextCommandId()
@@ -192,7 +193,14 @@ func chromiumOnBeforeContextMenu(currentWindow IBrowserWindow, browser *ICefBrow
 		imageSaveId = model.CefMis.NextCommandId()
 		model.AddItem(imageSaveId, i18n.Resource("imageSaveAs"))
 	}
-	if isCopyLink || isCopyImage {
+	isCopyVideo := params.MediaType() == consts.CM_MEDIATYPE_VIDEO && isMedia
+	if isCopyVideo {
+		videoUrlId = model.CefMis.NextCommandId()
+		model.AddItem(videoUrlId, i18n.Resource("copyVideoLink"))
+		videoSaveId = model.CefMis.NextCommandId()
+		model.AddItem(videoSaveId, i18n.Resource("videoSaveAs"))
+	}
+	if isCopyLink || isCopyImage || isCopyVideo {
 		model.AddSeparator()
 	}
 	backId = model.CefMis.NextCommandId()
@@ -312,6 +320,10 @@ func chromiumOnContextMenuCommand(currentWindow IBrowserWindow, currentChromium 
 	} else if commandId == imageUrlId {
 		lcl.Clipboard.SetAsText(params.SourceUrl())
 	} else if commandId == imageSaveId {
+		browser.StartDownload(params.SourceUrl())
+	} else if commandId == videoUrlId {
+		lcl.Clipboard.SetAsText(params.SourceUrl())
+	} else if commandId == videoSaveId {
 		browser.StartDownload(params.SourceUrl())
 	}
 	return true
