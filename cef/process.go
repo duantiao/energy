@@ -42,6 +42,7 @@ func makeProcess(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context,
 	if enableInfraProcess {
 		processKey = infraInternalProcess
 	}
+	fmt.Println("[Debug Process] enableInfraProcess:", enableInfraProcess)
 	fmt.Println("[Debug Process] processKey:", processKey)
 	fmt.Println("[Debug Process] before setting, internalProcess string value:", context.Global().getValueByKey(internalProcess).GetStringValue())
 	fmt.Println("[Debug Process] before setting, infraInternalProcess string value:", context.Global().getValueByKey(infraInternalProcess).GetStringValue())

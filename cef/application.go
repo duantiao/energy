@@ -331,10 +331,10 @@ func (m *TCEFApplication) defaultSetOnContextCreated() {
 	m.setOnContextCreated(func(browse *ICefBrowser, frame *ICefFrame, context *ICefV8Context, enableInfraProcess bool) bool {
 		var flag bool
 		if m.onContextCreated != nil {
-			flag = m.onContextCreated(browse, frame, context, enableInfraProcess)
+			flag = m.onContextCreated(browse, frame, context, m.enableInfraProcess)
 		}
 		if !flag {
-			appOnContextCreated(browse, frame, context, enableInfraProcess)
+			appOnContextCreated(browse, frame, context, m.enableInfraProcess)
 		}
 		return false
 	})
