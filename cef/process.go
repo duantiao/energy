@@ -11,6 +11,7 @@
 package cef
 
 import (
+	"fmt"
 	"github.com/energye/energy/v2/consts"
 )
 
@@ -27,6 +28,7 @@ var _processObject *ICefV8Value
 // makeProcess 进程扩展变量
 func makeProcess(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context, enableInfraProcess bool) {
 	if _processObject != nil {
+		fmt.Println("[Debug Process] _processObject string value will free:", _processObject.GetStringValue())
 		// 刷新时释放掉
 		_processObject.Free()
 	}
@@ -40,5 +42,12 @@ func makeProcess(browser *ICefBrowser, frame *ICefFrame, context *ICefV8Context,
 	if enableInfraProcess {
 		processKey = infraInternalProcess
 	}
+	fmt.Println("[Debug Process] processKey:", processKey)
+	fmt.Println("[Debug Process] before setting, internalProcess string value:", context.Global().getValueByKey(internalProcess).GetStringValue())
+	fmt.Println("[Debug Process] before setting, infraInternalProcess string value:", context.Global().getValueByKey(infraInternalProcess).GetStringValue())
+
 	context.Global().setValueByKey(processKey, _processObject, consts.V8_PROPERTY_ATTRIBUTE_READONLY)
+
+	fmt.Println("[Debug Process] after setting, internalProcess string value:", context.Global().getValueByKey(internalProcess).GetStringValue())
+	fmt.Println("[Debug Process] after setting, infraInternalProcess string value:", context.Global().getValueByKey(infraInternalProcess).GetStringValue())
 }
