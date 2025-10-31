@@ -170,7 +170,15 @@ func (m *ICefMenuModel) AddMenuItem(item *MenuItem) bool {
 			var alt = ArrayIndexOf(as, MA_Alt) != -1
 			var keyCode = rune(strings.ToUpper(as[len(as)-1])[0])
 			item.Accelerator = acceleratorCode(shift, ctrl, alt, keyCode)
-			m.SetAccelerator(item.CommandId, keyCode, shift, ctrl, alt)
+			m.SetAccelerator(item.CommandId, func(keyCode rune) int32 {
+				switch keyCode {
+				case '+':
+					return VkAdd
+				case '-':
+					return VkSubtract
+				}
+				return keyCode
+			}(keyCode), shift, ctrl, alt)
 			KeyAccelerator.acceleratorItems[item.Accelerator] = item
 		}
 	}
