@@ -42,13 +42,14 @@ type keyEventAccelerator struct {
 
 // MenuItem 菜单项
 type MenuItem struct {
-	CommandId   MenuId // >= 26500 and <= 28500
-	Accelerator string // 快捷键 shift ctrl alt【按键VK..】(shift+ctrl+alt+n)
-	Text        string //显示文本
-	Label       string
-	GroupId     int32 //分组 配合 MenuType 使用
-	MenuType    TCefContextMenuType
-	Callback    FuncCallback //点击 或 快捷键触发的回调
+	CommandId        MenuId   // >= 26500 and <= 28500
+	Accelerator      string   // 快捷键 shift ctrl alt【按键VK..】(shift+ctrl+alt+n)
+	AcceleratorGroup []string // 快捷键组合，解析时优先级高于Accelerator
+	Text             string   //显示文本
+	Label            string
+	GroupId          int32 //分组 配合 MenuType 使用
+	MenuType         TCefContextMenuType
+	Callback         FuncCallback //点击 或 快捷键触发的回调
 }
 
 // AddAcceleratorCustom 添加自定义快捷键
@@ -161,14 +162,16 @@ func (m *ICefMenuModel) AddMenuItem(item *MenuItem) bool {
 	if item.Label != "" {
 		m.SetLabel(item.CommandId, item.Label)
 	}
-	if item.Accelerator != "" {
+	if item.Accelerator != "" || len(item.AcceleratorGroup) > 0 {
 		item.Accelerator = strings.Replace(strings.ToUpper(item.Accelerator), " ", "", -1)
-		as := strings.Split(item.Accelerator, "+")
-		if len(as) > 0 && len(as) <= 4 {
-			var shift = ArrayIndexOf(as, MA_Shift) != -1
-			var ctrl = ArrayIndexOf(as, MA_Ctrl) != -1
-			var alt = ArrayIndexOf(as, MA_Alt) != -1
-			var keyCode = rune(strings.ToUpper(as[len(as)-1])[0])
+		if len(item.AcceleratorGroup) == 0 {
+			item.AcceleratorGroup = strings.Split(item.Accelerator, "+")
+		}
+		if len(item.AcceleratorGroup) > 0 && len(item.AcceleratorGroup) <= 4 {
+			var shift = ArrayIndexOf(item.AcceleratorGroup, MA_Shift) != -1
+			var ctrl = ArrayIndexOf(item.AcceleratorGroup, MA_Ctrl) != -1
+			var alt = ArrayIndexOf(item.AcceleratorGroup, MA_Alt) != -1
+			var keyCode = rune(strings.ToUpper(item.AcceleratorGroup[len(item.AcceleratorGroup)-1])[0])
 			item.Accelerator = acceleratorCode(shift, ctrl, alt, keyCode)
 			m.SetAccelerator(item.CommandId, func(keyCode rune) int32 {
 				switch keyCode {
