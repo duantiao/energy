@@ -79,6 +79,7 @@ var (
 	backId, forwardId, printId                                            consts.MenuId
 	undoId, redoId, cutId, copyId, pasteId, delId, selectAllId            consts.MenuId
 	imageUrlId, copyImageId, imageSaveId, aUrlId, videoUrlId, videoSaveId consts.MenuId
+	zoomResetId, zoomIncId, zoomDecId                                     consts.MenuId
 )
 
 // chromiumOnBeforeContextMenu 右键菜单 - 默认实现
@@ -257,6 +258,39 @@ func chromiumOnBeforeContextMenu(currentWindow IBrowserWindow, browser *ICefBrow
 			browser.ReloadIgnoreCache()
 		},
 	})
+	if currentWindow.Chromium().Config().EnableZoom() {
+		model.AddSeparator()
+		zoomResetId = model.CefMis.NextCommandId()
+		model.AddMenuItem(&MenuItem{
+			CommandId:   zoomResetId,
+			Text:        i18n.Resource("zoomReset"),
+			Accelerator: "ctrl+0",
+			Callback: func(browser *ICefBrowser, commandId consts.MenuId, params *ICefContextMenuParams, menuType consts.TCefContextMenuType, eventFlags uint32, result *bool) {
+				currentWindow.Chromium().BrowserZoom(consts.ZOOM_RESET)
+			},
+		})
+		model.SetEnabled(zoomResetId, true)
+		zoomIncId = model.CefMis.NextCommandId()
+		model.AddMenuItem(&MenuItem{
+			CommandId:   zoomIncId,
+			Text:        i18n.Resource("zoomIn"),
+			Accelerator: "ctrl+1", // Win平台尝试使用ctrl++失败
+			Callback: func(browser *ICefBrowser, commandId consts.MenuId, params *ICefContextMenuParams, menuType consts.TCefContextMenuType, eventFlags uint32, result *bool) {
+				currentWindow.Chromium().BrowserZoom(consts.ZOOM_INC)
+			},
+		})
+		model.SetEnabled(zoomIncId, true)
+		zoomDecId = model.CefMis.NextCommandId()
+		model.AddMenuItem(&MenuItem{
+			CommandId:   zoomDecId,
+			Text:        i18n.Resource("zoomOut"),
+			Accelerator: "ctrl+2", // Win平台尝试使用ctrl+-失败
+			Callback: func(browser *ICefBrowser, commandId consts.MenuId, params *ICefContextMenuParams, menuType consts.TCefContextMenuType, eventFlags uint32, result *bool) {
+				currentWindow.Chromium().BrowserZoom(consts.ZOOM_DEC)
+			},
+		})
+		model.SetEnabled(zoomDecId, true)
+	}
 	model.AddSeparator()
 	if currentWindow.Chromium().Config().EnableViewSource() {
 		viewSourceId = model.CefMis.NextCommandId()
@@ -325,6 +359,12 @@ func chromiumOnContextMenuCommand(currentWindow IBrowserWindow, currentChromium 
 		lcl.Clipboard.SetAsText(params.SourceUrl())
 	} else if commandId == videoSaveId {
 		browser.StartDownload(params.SourceUrl())
+	} else if commandId == zoomResetId && currentChromium.Chromium().Config().EnableZoom() {
+		currentWindow.Chromium().BrowserZoom(consts.ZOOM_RESET)
+	} else if commandId == zoomIncId && currentChromium.Chromium().Config().EnableZoom() {
+		currentWindow.Chromium().BrowserZoom(consts.ZOOM_INC)
+	} else if commandId == zoomDecId && currentChromium.Chromium().Config().EnableZoom() {
+		currentWindow.Chromium().BrowserZoom(consts.ZOOM_DEC)
 	}
 	return true
 }

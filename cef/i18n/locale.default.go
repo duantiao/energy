@@ -33,6 +33,9 @@ func initZhCn() {
 	resources["forcedRefresh"] = "强制刷新"
 	resources["viewPageSource"] = "查看网页源代码"
 	resources["devTools"] = "开发者工具(F12)"
+	resources["zoomReset"] = "实际大小"
+	resources["zoomIn"] = "放大"
+	resources["zoomOut"] = "缩小"
 }
 
 // initEnUs
@@ -58,4 +61,7 @@ func initEnUs() {
 	resources["forcedRefresh"] = "Forced Refresh"
 	resources["viewPageSource"] = "View Source"
 	resources["devTools"] = "Dev Tools(F12)"
+	resources["zoomReset"] = "Zoom Reset"
+	resources["zoomIn"] = "Zoom In"
+	resources["zoomOut"] = "Zoom Out"
 }

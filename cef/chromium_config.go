@@ -20,6 +20,7 @@ type TCefChromiumConfig struct {
 	enableWindowPopup bool //启用弹出新窗口
 	enableOpenUrlTab  bool //启用tab签打开新窗口(需自定义实现)
 	enabledJavascript bool //启用Javascript
+	enableZoom        bool //启用zoom，放大缩小
 }
 
 // NewChromiumConfig 创建默认启用相关功能
@@ -31,6 +32,7 @@ func NewChromiumConfig() *TCefChromiumConfig {
 		enableWindowPopup: true,
 		enableOpenUrlTab:  false,
 		enabledJavascript: false,
+		enableZoom:        true,
 	}
 }
 
@@ -102,4 +104,14 @@ func (m *TCefChromiumConfig) SetEnabledJavascript(value bool) *TCefChromiumConfi
 
 func (m *TCefChromiumConfig) EnabledJavascript() bool {
 	return m.enabledJavascript
+}
+
+// SetEnabledZoom 设置启用Zoom
+func (m *TCefChromiumConfig) SetEnabledZoom(value bool) *TCefChromiumConfig {
+	m.enableZoom = value
+	return m
+}
+
+func (m *TCefChromiumConfig) EnableZoom() bool {
+	return m.enableZoom
 }
