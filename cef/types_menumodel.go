@@ -11,6 +11,7 @@
 package cef
 
 import (
+	"fmt"
 	"github.com/energye/energy/v2/cef/internal/def"
 	. "github.com/energye/energy/v2/common"
 	"github.com/energye/energy/v2/common/imports"
@@ -176,10 +177,13 @@ func (m *ICefMenuModel) AddMenuItem(item *MenuItem) bool {
 			m.SetAccelerator(item.CommandId, func(keyCode rune) int32 {
 				switch keyCode {
 				case '+':
+					fmt.Println("keyCode '+' convert to VkAdd")
 					return VkAdd
 				case '-':
+					fmt.Println("keyCode '-' convert to VkSubtract")
 					return VkSubtract
 				}
+				fmt.Println("keyCode", keyCode)
 				return keyCode
 			}(keyCode), shift, ctrl, alt)
 			KeyAccelerator.acceleratorItems[item.Accelerator] = item
